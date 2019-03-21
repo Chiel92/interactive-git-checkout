@@ -7,7 +7,7 @@ import subprocess
 import unittest
 
 from collections import namedtuple
-from StringIO import StringIO
+from io import StringIO
 from subprocess import call
 
 
@@ -25,13 +25,13 @@ BranchesInfo = namedtuple('BranchesInfo', [
 def get_git_branches():
     "Returns git branch output."
     command = ['git', 'branch', '--no-color']
-    return subprocess.check_output(command)
+    return subprocess.check_output(command).decode('ascii')
 
 
 def git_checkout(branch):
     "Returns git checkout output."
     command = ['git', 'checkout', branch]
-    return subprocess.check_output(command)
+    return subprocess.check_output(command).decode('ascii')
 
 
 def branches_menu(branches_info):
@@ -126,7 +126,7 @@ def main(args):
     branches_info = parse_git_branches(output)
     print(branches_menu(branches_info))
     try:
-        choice = raw_input('Select a branch by number: ')
+        choice = input('Select a branch by number: ')
         branch = branches_info.all_branches[int(choice)]
         print(git_checkout(branch))
     except KeyboardInterrupt:
